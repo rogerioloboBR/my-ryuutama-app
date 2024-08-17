@@ -1,9 +1,11 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Character } from '../types/Character';
+import { RyuujinType } from '../types/Ryuujin';
+import RyuujinSelect from './RyuujinSelect';
 import './CharacterForm.css'; // Certifique-se de que o arquivo CSS está no mesmo diretório
 
 const CharacterForm: React.FC<{ onSave: (character: Character) => void }> = ({ onSave }) => {
-    const [ryuujin, setRyuujin] = useState<string>('');
+    const [ryuujin, setRyuujin] = useState<RyuujinType>(RyuujinType['Ao-Ryuu']);
     const [createAt, setCreateAt] = useState<string>(new Date().toISOString().split('T')[0]);
     const [nameCharacter, setNameCharacter] = useState<string>('');
     const [namePlayer, setNamePlayer] = useState<string>('');
@@ -43,11 +45,11 @@ const CharacterForm: React.FC<{ onSave: (character: Character) => void }> = ({ o
     const [appearance, setAppearance] = useState<string>('');
 
     // Atualiza PV e PM quando os atributos mudam
-    
+
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        
+
         const character: Character = {
             ryuujin,
             createAt,
@@ -62,7 +64,7 @@ const CharacterForm: React.FC<{ onSave: (character: Character) => void }> = ({ o
             characterSeason,
             attributes,
             pv: calculatePV(),
-            pm:calculatePM(),
+            pm: calculatePM(),
             classSkills,
             statsUsed,
             effect,
@@ -84,7 +86,7 @@ const CharacterForm: React.FC<{ onSave: (character: Character) => void }> = ({ o
             <h1>Ficha de Personagem</h1>
             <label>
                 Ryuujin:
-                <input type="text" value={ryuujin} onChange={(e: ChangeEvent<HTMLInputElement>) => setRyuujin(e.target.value)} />
+                <RyuujinSelect value={ryuujin} onChange={setRyuujin} />
             </label>
             <label>
                 Data de Criação:
