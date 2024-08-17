@@ -20,7 +20,11 @@ const CharacterForm: React.FC<{ onSave: (character: Character) => void }> = ({ o
         inteligencia: 6,
         espirito: 6,
     });
-    const [pv, setPv] = useState<number>(0);
+    const calculatePV = (): number => attributes.forca * 2;
+    const calculatePM = (): number => attributes.espirito * 2;
+    const calculateCond = (): number => attributes.forca + attributes.espirito;
+    const calculateInit = (): number => attributes.forca + attributes.inteligencia;
+
     const [pm, setPm] = useState<number>(0);
     const [classSkills, setClassSkills] = useState<string[]>([]);
     const [statsUsed, setStatsUsed] = useState<string>('');
@@ -39,21 +43,11 @@ const CharacterForm: React.FC<{ onSave: (character: Character) => void }> = ({ o
     const [appearance, setAppearance] = useState<string>('');
 
     // Atualiza PV e PM quando os atributos mudam
-    const updatePvPm = () => {
-        setPv(attributes.forca * 2);
-        setPm(attributes.espirito * 2);
-    };
-
-    // Calcula a condição e a iniciativa
-    const updateConditionAndInitiative = () => {
-        setCondition(attributes.forca + attributes.espirito);
-        setInitiative(attributes.destreza + attributes.inteligencia);
-    };
+    
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        updatePvPm();
-        updateConditionAndInitiative();
+        
         const character: Character = {
             ryuujin,
             createAt,
@@ -67,14 +61,14 @@ const CharacterForm: React.FC<{ onSave: (character: Character) => void }> = ({ o
             characterType,
             characterSeason,
             attributes,
-            pv,
-            pm,
+            pv: calculatePV(),
+            pm:calculatePM(),
             classSkills,
             statsUsed,
             effect,
             spells,
-            condition,
-            initiative,
+            condition: calculateCond(),
+            initiative: calculateInit(),
             equipment,
             travel,
             hometown,
@@ -177,10 +171,10 @@ const CharacterForm: React.FC<{ onSave: (character: Character) => void }> = ({ o
             </fieldset>
 
             <div>
-                <p>Pontos de Vida (PV): {pv}</p>
-                <p>Pontos de Magia (PM): {pm}</p>
-                <p>Condição: {condition}</p>
-                <p>Iniciativa: {initiative}</p>
+                <p>Pontos de Vida (PV): {calculatePV()}</p>
+                <p>Pontos de Magia (PM): {calculatePM()}</p>
+                <p>Condição: {calculateCond()}</p>
+                <p>Iniciativa: {calculateInit()}</p>
             </div>
 
             <label>
